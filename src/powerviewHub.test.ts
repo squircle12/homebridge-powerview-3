@@ -67,3 +67,32 @@ describe('PowerViewHub.requestJson', () => {
     );
   });
 });
+
+describe('PowerViewHub request timeout', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it('aborts a hung request instead of waiting forever', async () => {
+    vi.useFakeTimers();
+    // A hub that accepts the connection and never answers. Node's fetch has no
+    // default timeout, so without an AbortController this promise never settles.
+    vi.stubGlobal('fetch', vi.fn((_url: string, init?: RequestInit) => {
+      return new Promise((_resolve, reject) => {
+        init?.signal?.addEventListener('abort', () => {
+          reject(new DOMException('The operation was aborted.', 'AbortError'));
+        });
+      });
+    }));
+
+    const request = hub().requestJson('http://127.0.0.1/api/userdata', undefined, {
+      retriesOnMaintenance: false,
+    });
+    const assertion = expect(request).rejects.toSatisfy(
+      (err: unknown) => isHubError(err) && err.code === HubErrorCode.Timeout,
+    );
+    await vi.advanceTimersByTimeAsync(20000);
+    await assertion;
+  });
+});
