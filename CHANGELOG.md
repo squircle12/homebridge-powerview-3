@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- HomeKit position reads no longer block on a hub refresh. Waking a shade over RF routinely exceeded HomeKit's read budget and logged `read handler ... didn't respond at all`. Reads answer from cache immediately and refresh in the background; `strictErrors` keeps the previous blocking behaviour.
+
 ## [3.1.2] - 2026-05-18
 
 ### Added
