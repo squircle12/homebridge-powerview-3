@@ -6,6 +6,8 @@ All notable changes to this project are documented in this file.
 
 ### Fixed
 
+- Removed the duplicate `StatusLowBattery` characteristic from Accessory Information, which is not a permitted service for it and logged a Homebridge warning per shade on every refresh.
+
 - Battery level is now derived from `batteryStrength` (tenths of a volt against an 18.0V nominal pack) instead of being read as a percentage. Gen 1/2 readings above 100 previously fell through to a four-value `batteryStatus` lookup, so every healthy shade reported 90%. `batteryStrength` 0 is now treated as unknown rather than empty, which removes a false low-battery warning for shades the hub has not polled yet.
 
 ## [3.1.2] - 2026-05-18
