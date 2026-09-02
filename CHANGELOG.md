@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Every hub request now has a 15s timeout. Node's fetch has no default timeout, so a half-open socket to the hub waited indefinitely and stalled the request queue behind it.
+
 ## [3.1.2] - 2026-05-18
 
 ### Added
