@@ -6,6 +6,8 @@ All notable changes to this project are documented in this file.
 
 ### Fixed
 
+- All hub HTTP requests are now serialised. Capability probes and the `/api/shades` listing bypassed the shade queue and ran concurrently with it; legacy hubs answer one request at a time and responded with timeouts and truncated JSON under that load.
+
 - The shade request queue now always advances. Building the request URL happened outside the try block, so a throw there left the head of the queue in place with nothing to reschedule and every later request unresolved.
 
 - Every hub request now has a 15s timeout. Node's fetch has no default timeout, so a half-open socket to the hub waited indefinitely and stalled the request queue behind it.
