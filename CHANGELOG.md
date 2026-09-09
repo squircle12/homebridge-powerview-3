@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Hub generation is now detected from the firmware major revision. It was matched against the firmware name, but both Gen 1 and Gen 2 report `PowerView Hub`, so the hint was always `unknown`.
+
 ## [3.1.2] - 2026-05-18
 
 ### Added
